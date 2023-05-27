@@ -1,26 +1,3 @@
-
-// import { Sequelize } from 'sequelize';
-// export const db = new Sequelize("postgres", "postgres", "453622", {
-//     host: "localhost",
-//     port: 5432,
-//     dialect: "postgres",
-//     logging: false,
-  
-  
-//   });
-
-//   export const connectDB = async () => {
-//     try {
-//       await db.authenticate();
-//       await db.sync();
-//       console.log("Connection has been established successfully.");
-//     } catch (error) {
-//       console.error("Unable to connect to the database:", error);
-//     }
-// }
-
-
-
 import { Sequelize } from 'sequelize';
 
 export const db = new Sequelize("postgres", "postgres", "453622", {
