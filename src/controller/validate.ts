@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express"
 import * as dotenv from 'dotenv'
 import  { create_payload} from "../middleware/payload"
+import { CardToken } from "../model/token";
 const Flutterwave = require('flutterwave-node-v3');
 
 dotenv.config()
@@ -18,7 +19,7 @@ export const validate_pay = async (req:Request, res:Response, next:NextFunction)
         authorization: {
             mode: "pin",
 
-            pin: 3310
+            pin: req.body.pin
         }
 
     }
@@ -27,7 +28,7 @@ try {
     
 
     const checkCharge = await flw.Charge.card(pin_payload)
-    console.log(checkCharge)
+    // console.log(checkCharge)
 
     if (checkCharge.meta.authorization.mode === 'otp') {
         const flw_ref = checkCharge.data.flw_ref
@@ -37,6 +38,8 @@ try {
         };
     
         const otpValidation = await flw.Charge.validate(otpValidatePayload);
+        console.log(otpValidation)
+        const details = await CardToken.create(otpValidation)
         return res.status(200).json(otpValidation)
 
     } else if (checkCharge.meta.authorization.mode === 'redirect') {
@@ -62,3 +65,4 @@ try {
 }
 
 }
+

@@ -10,7 +10,8 @@ export const db = new Sequelize("postgres", "postgres", "453622", {
 export function connectDB(): Sequelize {
   try {
     db.authenticate();
-    db.sync();
+    db.sync(); 
+    // db.drop() 
     console.log("Connection has been established successfully.");
     return db;
   } catch (error) {
