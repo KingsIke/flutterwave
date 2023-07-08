@@ -13,19 +13,9 @@ dotenv.config()
 
 const flw = new Flutterwave(process.env.PUBLIC_KEY, process.env.SECRET_KEY);
 
-// const validationSchema = Joi.object({
-//     tx_ref: Joi.string().required(),
-//     otp: Joi.string().length(5).required()
-//   });
 export const authorization = async (req:Request, res:Response, next:NextFunction) => {
 
     try {
-
-    //     const NotAuthroize = validationSchema.validate(req.body);
-    // if (NotAuthroize.error) {
-    //   return res.status(400).json({ error: NotAuthroize.error.details[0].message });
-    // }
-    
   
   const user_ref = await Reference_Flw.findOne({
     where :{
@@ -53,34 +43,14 @@ export const authorization = async (req:Request, res:Response, next:NextFunction
         flw_ref: flw_ref,
       };
 
-    //   console.log(otpValidatePayload)
-        // const otpValidatePayload = {
-        //     otp: req.body.otp,
-        //     flw_ref: user_ref.checkCharge.data.flw_ref
-        // };
+
     
         const otpValidation = await flw.Charge.validate(otpValidatePayload);
-        console.log(otpValidation)
+     
          await CardToken.create({otpValidation})
         return res.status(200)
             .json(otpValidation)
             // .redirect('/token')
-
-
-   
-//     // } else {
-//         // const transactionId = checkCharge.data.id;
-//         // const transaction = await flw.Transaction.verify({
-//         //     id: transactionId
-//         // });
-//         // if (transaction.data.status == "success") {
-//         //     return res.json({ message:'Payment successful'});
-//         // }
-
-//         // else {
-//         //     return res.json({ message: 'Payment-failed'});
-//         // }
-//     // }
 
 } 
     catch (error:any) {

@@ -1,7 +1,4 @@
-''
-
 import express from 'express';
-// import { pay_authroize } from '../controller/pay';
 import { verification } from '../controller/verify';
 
 
