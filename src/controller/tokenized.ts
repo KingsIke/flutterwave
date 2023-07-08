@@ -94,7 +94,7 @@ export const cardTokenized = async (req: Request, res: Response, next: NextFunct
   try {
     
  
-const {  token, amount,email} = req.body
+const {  token, amount,email} = req.body   
   const user = await CardDetails.findOne({
     where: {
       email: req.body.email,
@@ -111,6 +111,7 @@ const {  token, amount,email} = req.body
     narration: "Payment for monthly magazine subscription",
 };
 const saved = await flw.Tokenized.charge(details);
+
 console.log(saved)
 res.json(saved)
 } catch (error:any) {

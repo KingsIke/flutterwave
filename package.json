@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-dev ./src/app.ts",
     "dev": "ts-node-dev ./src/card.ts"
-
   },
   "keywords": [],
   "author": "",
@@ -20,6 +19,7 @@
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.3",
     "flutterwave-node-v3": "^1.1.5",
+    "joi": "^17.9.2",
     "memorystore": "^1.6.7",
     "nodemon": "^2.0.22",
     "pg": "^8.11.0",

@@ -2,18 +2,18 @@ import { Sequelize, Model, DataTypes } from "sequelize";
 import { connectDB } from "../config/db";
 
 export interface Tokonization {
-  data: object;
+  otpValidation: object;
   
 }
 
 export class CardToken extends Model<Tokonization> {
-  declare  data: object
+  declare  otpValidation: object
 }
 
 CardToken.init(
   {
-    data: {
-        type: DataTypes.JSONB,
+    otpValidation: {
+        type: DataTypes.JSON,
         allowNull: false,
     },
    

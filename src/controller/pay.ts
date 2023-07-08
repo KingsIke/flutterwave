@@ -2,6 +2,7 @@
 // import * as dotenv from 'dotenv'
 // import { Transaction } from "../model/schema";
 // import  { create_payload} from "../middleware/payload"
+// import { UserDetails } from "../model/pin";
 // const Flutterwave = require('flutterwave-node-v3');
 
 
@@ -14,6 +15,7 @@
 //     const payload = create_payload(req)
 
 //     try {
+        
 //         const response = await flw.Charge.card(payload);
    
 //         const authorizationMode = response.meta.authorization.mode;
@@ -25,10 +27,11 @@
 //                 authorization: {
 //                     mode: "pin",
 
-//                     pin: 3310
+//                     pin: req.body.pin
 //                 }
 //             };
-//             let checkCharge = await flw.Charge.card(pin_payload)
+//             await UserDetails.create({pin_payload})
+//             const  checkCharge = await flw.Charge.card(pin_payload)
 //             return res.status(200).json(checkCharge.data.tx_ref)
 
 //         } else if (authorizationMode === 'redirect') {
@@ -58,7 +61,6 @@
 //     } catch (error:any) {
 //         res.status(500).json({ message: error.message });
 //     }
-
 // }
 
 
@@ -66,6 +68,7 @@ import express, { Request, Response, NextFunction } from "express"
 import * as dotenv from 'dotenv'
 import { Transaction } from "../model/schema";
 import  { create_payload} from "../middleware/payload"
+import { UserDetails } from "../model/pin";
 const Flutterwave = require('flutterwave-node-v3');
 
 
@@ -78,23 +81,31 @@ export const pay_authroize = async (req:Request, res:Response) => {
     const payload = create_payload(req)
 
     try {
-        
+        const existingUserDetails = await UserDetails.findOne({
+            where: {
+              'payload.email': payload.email,
+              'payload.card_number': payload.card_number,
+              'payload.cvv': payload.cvv,
+
+
+            },
+          });
+      
+          if (existingUserDetails) {
+            return res.status(200)
+                .json({ message: 'User details already exist' });
+                // .redirect('/pay/validate')
+          }
         const response = await flw.Charge.card(payload);
+        await UserDetails.create({ payload})
    
         const authorizationMode = response.meta.authorization.mode;
 
         if (authorizationMode === "pin") {
-            const pin_payload = {
 
-                ...payload,
-                authorization: {
-                    mode: "pin",
-
-                    pin: req.body.pin
-                }
-            };
-            let checkCharge = await flw.Charge.card(pin_payload)
-            return res.status(200).json(checkCharge.data.tx_ref)
+            res.status(200)
+                .json({message:"Input Pin"})
+                // .redirect('/pay/validate')
 
         } else if (authorizationMode === 'redirect') {
             await Transaction.create({
