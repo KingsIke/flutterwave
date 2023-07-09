@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 
-const port = 4000;
+//const port = 4000;
 connectDB();
 
 app.use(bodyParser.json());
@@ -26,6 +26,9 @@ app.use("/api", verifyRoutes);
 app.use("/api", authroizeRoutes);
 
 
-app.listen(port, () => {
-  console.log(`server at port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`server at port ${port}`);
+// });
+
+
+export default app;

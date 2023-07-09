@@ -2,11 +2,14 @@
   "name": "fluttterwave",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node-dev ./src/app.ts",
-    "dev": "ts-node-dev ./src/card.ts"
+    "compile": "tsc -w",
+    "start": "node ./bin/www",
+    "lint": "npx eslint --ext .ts src/",
+    "lint:tests": "npx eslint --ext .ts spec/",
+    "dev": "nodemon ./bin/www",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
