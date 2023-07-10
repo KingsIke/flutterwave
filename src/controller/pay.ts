@@ -15,23 +15,23 @@ export const pay_authroize = async (req:Request, res:Response) => {
     const payload = create_payload(req)
 
     try {
-        const existingUserDetails = await UserDetails.findOne({
-            where: {
-              'payload.email': payload.email,
-              'payload.card_number': payload.card_number,
-              'payload.cvv': payload.cvv,
+        // const existingUserDetails = await UserDetails.findOne({
+        //     where: {
+        //       'payload.email': payload.email,
+        //       'payload.card_number': payload.card_number,
+        //       'payload.cvv': payload.cvv,
 
 
-            },
-          });
+        //     },
+        //   });
       
-          if (existingUserDetails) {
-            return res.status(200)
-                .json({ message: 'User details already exist' });
-                // .redirect('/pay/validate')
-          }
+        //   if (existingUserDetails) {
+        //     return res.status(200)
+        //         .json({ message: 'User details already exist' });
+        //         // .redirect('/pay/validate')
+        //   }
         const response = await flw.Charge.card(payload);
-        await UserDetails.create({ payload})
+        // await UserDetails.create({ payload})
    
         const authorizationMode = response.meta.authorization.mode;
 

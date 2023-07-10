@@ -34,7 +34,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cardTokenized = void 0;
 const dotenv = __importStar(require("dotenv"));
-const Recurring_1 = require("../model/Recurring");
 const Flutterwave = require('flutterwave-node-v3');
 const uuid_1 = require("uuid");
 const generateTxRef = () => {
@@ -44,32 +43,41 @@ dotenv.config();
 const flw = new Flutterwave(process.env.PUBLIC_KEY, process.env.SECRET_KEY);
 const cardTokenized = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield Recurring_1.CardDetails.findOne({
-            where: {
-                response: {
-                    data: {
-                        card: {
-                            token: req.body.token,
-                        },
-                        customer: {
-                            email: req.body.email
-                        }
-                    }
-                }
-            }
-        });
+        // const user = await CardDetails.findOne({
+        // where: {
+        // response:{
+        // data:{
+        // card:{
+        // token: req.body.token,
+        // },
+        // customer:{
+        // email:req.body.email
+        // }
+        // }
+        // }
+        // }
+        // })
+        // const details = {
+        // token: (user?.response as any).data.card.token,
+        // currency: req.body.currency,
+        // country:req.body.country,
+        // amount: req.body.amount,
+        // email: (user?.response as any).data.customer.email,
+        // tx_ref: generateTxRef(),
+        // narration: "Payment for monthly magazine subscription",
+        // };
         const details = {
-            token: (user === null || user === void 0 ? void 0 : user.response).data.card.token,
+            token: req.body.token,
             currency: req.body.currency,
             country: req.body.country,
             amount: req.body.amount,
-            email: (user === null || user === void 0 ? void 0 : user.response).data.customer.email,
+            email: req.body.email,
             tx_ref: generateTxRef(),
             narration: "Payment for monthly magazine subscription",
         };
-        if (!user) {
-            return res.status(404).json({ message: "Card details is Wrong" });
-        }
+        // if (!user) {
+        // return res.status(404).json({ message: "Card details is Wrong" });
+        // }
         const charged = yield flw.Tokenized.charge(details);
         console.log(charged);
         res.json(charged);

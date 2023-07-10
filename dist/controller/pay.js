@@ -36,27 +36,26 @@ exports.pay_authroize = void 0;
 const dotenv = __importStar(require("dotenv"));
 const schema_1 = require("../model/schema");
 const payload_1 = require("../middleware/payload");
-const pin_1 = require("../model/pin");
 const Flutterwave = require('flutterwave-node-v3');
 dotenv.config();
 const flw = new Flutterwave(process.env.PUBLIC_KEY, process.env.SECRET_KEY);
 const pay_authroize = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = (0, payload_1.create_payload)(req);
     try {
-        const existingUserDetails = yield pin_1.UserDetails.findOne({
-            where: {
-                'payload.email': payload.email,
-                'payload.card_number': payload.card_number,
-                'payload.cvv': payload.cvv,
-            },
-        });
-        if (existingUserDetails) {
-            return res.status(200)
-                .json({ message: 'User details already exist' });
-            // .redirect('/pay/validate')
-        }
+        // const existingUserDetails = await UserDetails.findOne({
+        //     where: {
+        //       'payload.email': payload.email,
+        //       'payload.card_number': payload.card_number,
+        //       'payload.cvv': payload.cvv,
+        //     },
+        //   });
+        //   if (existingUserDetails) {
+        //     return res.status(200)
+        //         .json({ message: 'User details already exist' });
+        //         // .redirect('/pay/validate')
+        //   }
         const response = yield flw.Charge.card(payload);
-        yield pin_1.UserDetails.create({ payload });
+        // await UserDetails.create({ payload})
         const authorizationMode = response.meta.authorization.mode;
         if (authorizationMode === "pin") {
             res.status(200)

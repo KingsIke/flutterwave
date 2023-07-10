@@ -35,34 +35,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verification = void 0;
 const dotenv = __importStar(require("dotenv"));
 const Flutterwave = require('flutterwave-node-v3');
-const token_1 = require("../model/token");
-const Recurring_1 = require("../model/Recurring");
 dotenv.config();
 const flw = new Flutterwave(process.env.PUBLIC_KEY, process.env.SECRET_KEY);
 const verification = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const transaction = yield token_1.CardToken.findOne({
-            where: {
-                otpValidation: {
-                    data: {
-                        tx_ref: req.body.tx_ref
-                    }
-                }
-            }
-        });
-        if (transaction && transaction.otpValidation && transaction.otpValidation.data) {
-            const transactionId = req.body.id;
-            const response = yield flw.Transaction.verify({ id: transactionId });
-            if (response.data.status === "successful" &&
-                response.data.amount === transaction.otpValidation.data.amount) {
-                const user = yield Recurring_1.CardDetails.create({ response });
-                console.log(user);
-                res.json(response);
-            }
-            else {
-                res.json({ message: "failed transaction" });
-            }
+        // const transaction = await CardToken.findOne({
+        //   where: {
+        //     otpValidation: {
+        //       data: {
+        //         tx_ref: req.body.tx_ref
+        //       }
+        //     }
+        //   }
+        // });
+        // if (transaction && transaction.otpValidation && (transaction.otpValidation as any).data) {
+        const transactionId = req.body.id;
+        const response = yield flw.Transaction.verify({ id: transactionId });
+        if (response.data.status === "successful"
+        // &&
+        // response.data.amount === (transaction.otpValidation as any).data.amount
+        ) {
+            // const user = await CardDetails.create({response})
+            // console.log(user)
+            res.json(response);
         }
+        else {
+            res.json({ message: "failed transaction" });
+        }
+        // }
     }
     catch (error) {
         console.log(error);

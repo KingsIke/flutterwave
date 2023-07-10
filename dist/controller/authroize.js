@@ -34,34 +34,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorization = void 0;
 const dotenv = __importStar(require("dotenv"));
-const token_1 = require("../model/token");
-const authorize_1 = require("../model/authorize");
 const Flutterwave = require('flutterwave-node-v3');
 dotenv.config();
 const flw = new Flutterwave(process.env.PUBLIC_KEY, process.env.SECRET_KEY);
 const authorization = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user_ref = yield authorize_1.Reference_Flw.findOne({
-            where: {
-                checkCharge: {
-                    data: {
-                        tx_ref: req.body.tx_ref
-                    }
-                }
-            }
-        });
-        if (!user_ref) {
-            return res.status(404)
-                .json({ message: "Wrong reference details" });
-            // .redirect('/pay/validate')
-        }
-        const flw_ref = user_ref.checkCharge.data.flw_ref;
+        // const user_ref = await Reference_Flw.findOne({
+        //   where :{
+        //       checkCharge:{
+        //           data:{
+        //               tx_ref: req.body.tx_ref
+        //           }
+        //       }
+        //   }
+        // })
+        //   if (!user_ref) {
+        //       return res.status(404)
+        //           .json({ message: "Wrong reference details" })
+        //           // .redirect('/pay/validate')
+        //     }
+        // const flw_ref = (user_ref.checkCharge as any).data.flw_ref;
+        const flw_ref = req.body.flw_ref;
         const otpValidatePayload = {
             otp: req.body.otp,
             flw_ref: flw_ref,
         };
         const otpValidation = yield flw.Charge.validate(otpValidatePayload);
-        yield token_1.CardToken.create({ otpValidation });
+        //  await CardToken.create({otpValidation})
         return res.status(200)
             .json(otpValidation);
         // .redirect('/token')

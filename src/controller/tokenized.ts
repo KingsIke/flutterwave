@@ -16,37 +16,46 @@ export const cardTokenized = async (req: Request, res: Response, next: NextFunct
 try {
 
 
-const user = await CardDetails.findOne({
-where: {
-response:{
-data:{
-card:{
-token: req.body.token,
-},
-customer:{
-email:req.body.email
-}
+// const user = await CardDetails.findOne({
+// where: {
+// response:{
+// data:{
+// card:{
+// token: req.body.token,
+// },
+// customer:{
+// email:req.body.email
+// }
 
-}
-}
-}
+// }
+// }
+// }
 
 
 
-})
+// })
+// const details = {
+// token: (user?.response as any).data.card.token,
+// currency: req.body.currency,
+// country:req.body.country,
+// amount: req.body.amount,
+// email: (user?.response as any).data.customer.email,
+// tx_ref: generateTxRef(),
+// narration: "Payment for monthly magazine subscription",
+// };
 const details = {
-token: (user?.response as any).data.card.token,
-currency: req.body.currency,
-country:req.body.country,
-amount: req.body.amount,
-email: (user?.response as any).data.customer.email,
-tx_ref: generateTxRef(),
-narration: "Payment for monthly magazine subscription",
-};
+    token: req.body.token,
+    currency: req.body.currency,
+    country:req.body.country,
+    amount: req.body.amount,
+    email: req.body.email,
+    tx_ref: generateTxRef(),
+    narration: "Payment for monthly magazine subscription",
+    };
 
-if (!user) {
-return res.status(404).json({ message: "Card details is Wrong" });
-}
+// if (!user) {
+// return res.status(404).json({ message: "Card details is Wrong" });
+// }
 
 const charged = await flw.Tokenized.charge(details);
 console.log(charged)

@@ -17,26 +17,27 @@ export const authorization = async (req:Request, res:Response, next:NextFunction
 
     try {
   
-  const user_ref = await Reference_Flw.findOne({
-    where :{
-        checkCharge:{
-            data:{
+  // const user_ref = await Reference_Flw.findOne({
+  //   where :{
+  //       checkCharge:{
+  //           data:{
 
-                tx_ref: req.body.tx_ref
-            }
-        }
+  //               tx_ref: req.body.tx_ref
+  //           }
+  //       }
         
-    }
-  })
+  //   }
+  // })
 
-    if (!user_ref) {
-        return res.status(404)
-            .json({ message: "Wrong reference details" })
-            // .redirect('/pay/validate')
-      }
+  //   if (!user_ref) {
+  //       return res.status(404)
+  //           .json({ message: "Wrong reference details" })
+  //           // .redirect('/pay/validate')
+  //     }
 
 
-      const flw_ref = (user_ref.checkCharge as any).data.flw_ref;
+      // const flw_ref = (user_ref.checkCharge as any).data.flw_ref;
+      const flw_ref = req.body.flw_ref
 
       const otpValidatePayload = {
         otp: req.body.otp,
@@ -47,7 +48,7 @@ export const authorization = async (req:Request, res:Response, next:NextFunction
     
         const otpValidation = await flw.Charge.validate(otpValidatePayload);
      
-         await CardToken.create({otpValidation})
+        //  await CardToken.create({otpValidation})
         return res.status(200)
             .json(otpValidation)
             // .redirect('/token')

@@ -34,26 +34,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate_pay = void 0;
 const dotenv = __importStar(require("dotenv"));
-const pin_1 = require("../model/pin");
-const authorize_1 = require("../model/authorize");
+const payload_1 = require("../middleware/payload");
 const Flutterwave = require('flutterwave-node-v3');
 dotenv.config();
 const flw = new Flutterwave(process.env.PUBLIC_KEY, process.env.SECRET_KEY);
 const validate_pay = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const userdetail = yield pin_1.UserDetails.findOne({
-        where: {
-            payload: {
-                card_number: req.body.card_number,
-                cvv: req.body.cvv
-            }
-        }
-    });
-    if (!userdetail) {
-        return res.status(404)
-            .json({ message: "Wrong Card details" });
-        // .redirect('/pay',)
-    }
-    const payload = userdetail.payload;
+    // const userdetail = await UserDetails.findOne({
+    //   where :{
+    //       payload:{
+    //           card_number:req.body.card_number,
+    //           cvv:req.body.cvv
+    //       }
+    //   }
+    // })
+    //   if (!userdetail) {
+    //       return res.status(404)
+    //           .json({ message: "Wrong Card details" })
+    //           // .redirect('/pay',)
+    //     }
+    // const payload = userdetail.payload;
+    const payload = (0, payload_1.create_payload)(req);
     const pin_payload = Object.assign(Object.assign({}, payload), { authorization: {
             mode: "pin",
             pin: req.body.pin,
@@ -61,14 +61,14 @@ const validate_pay = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     try {
         const checkCharge = yield flw.Charge.card(pin_payload);
         if (checkCharge.meta.authorization.mode === 'otp') {
-            const [referenceFlw, created] = yield authorize_1.Reference_Flw.findOrCreate({
-                where: { checkCharge },
-                defaults: { checkCharge },
-            });
-            if (!created) {
-                throw new Error("Reference already exists");
-            }
-            res.status(200).json(checkCharge.data.tx_ref);
+            // const [referenceFlw, created] = await Reference_Flw.findOrCreate({
+            //     where: { checkCharge },
+            //     defaults: { checkCharge },
+            //   });
+            //   if (!created) {
+            //     throw new Error("Reference already exists");
+            //   }
+            res.status(200).json(checkCharge.data);
         }
         else if (checkCharge.meta.authorization.mode === 'redirect') {
             const authUrl = checkCharge.meta.authorization.redirect;
