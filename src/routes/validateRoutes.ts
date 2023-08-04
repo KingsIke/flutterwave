@@ -1,9 +1,10 @@
-import express from 'express';
-import { validate_pay } from '../controller/validate';
+// import express from 'express';
+// import { validate_pay } from '../controller/validate';
+// import { pinchargeCard } from '../controller/card';
 
 
-const router = express.Router()
+// const router = express.Router()
  
 
-router.post( '/pay/validate', validate_pay)
-export default router
+// router.post( '/pay/validate', pinchargeCard)
+// export default router

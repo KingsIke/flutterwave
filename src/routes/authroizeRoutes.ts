@@ -1,9 +1,9 @@
-import express from 'express';
-import { authorization } from '../controller/authroize';
+// import express from 'express';
+// import { authorization } from '../controller/authroize';
 
 
-const router = express.Router()
+// const router = express.Router()
  
 
-router.post( '/authroize', authorization)
-export default router
+// router.post( '/authroize', authorization)
+// export default router

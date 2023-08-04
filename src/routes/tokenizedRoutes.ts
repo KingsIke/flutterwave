@@ -1,9 +1,9 @@
-import express from 'express';
-import { cardTokenized } from '../controller/tokenized';
+// import express from 'express';
+// import { cardTokenized } from '../controller/tokenized';
 
 
-const router = express.Router()
+// const router = express.Router()
  
 
-router.post( '/token', cardTokenized)
-export default router
+// router.post( '/token', cardTokenized)
+// export default router

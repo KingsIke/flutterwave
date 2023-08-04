@@ -1,9 +1,9 @@
-import express from 'express';
-import { verification } from '../controller/verify';
+// import express from 'express';
+// import { verification } from '../controller/verify';
 
 
-const router = express.Router()
+// const router = express.Router()
  
 
-router.post('/verify-payment', verification)
-export default router
+// router.post('/verify-payment', verification)
+// export default router
